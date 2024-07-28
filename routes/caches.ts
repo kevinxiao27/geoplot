@@ -2,12 +2,14 @@ import express, { Router, Request, Response } from "express";
 import {
   addCache,
   deleteCache,
+  getCacheFromPoint,
   getCaches,
   updateCache,
-} from "../controllers/caches";
+} from "../controllers/geocaches";
 import { validateResults } from "../middlewares/validation";
-import { check, param } from "express-validator";
+import { body, check, param } from "express-validator";
 import { isValidObjectId } from "mongoose";
+import { isInt8Array } from "util/types";
 
 const cachesRouter: Router = express.Router();
 const validateId = param("id")
@@ -19,6 +21,27 @@ const validateId = param("id")
   });
 
 cachesRouter.get("/", getCaches);
+cachesRouter.get(
+  "/point",
+  [
+    body("distance").exists().isNumeric(),
+    body("location.coordinates")
+      .notEmpty()
+      .custom((coord) => {
+        if (
+          !Array.isArray(coord) ||
+          coord.length != 2 ||
+          !(typeof coord[0] === "number" && coord[0] === coord[0]) ||
+          !(typeof coord[1] === "number" && coord[1] === coord[1])
+        ) {
+          throw new Error("Invalid coordinates");
+        }
+        return true;
+      }),
+    validateResults,
+  ],
+  getCacheFromPoint
+);
 cachesRouter.post(
   "/",
   [check(["name", "desc"]).not().isEmpty(), validateResults],

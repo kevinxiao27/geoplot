@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 // 1. Create an interface representing a document in MongoDB.
-interface Cache {
+interface GeoCache {
   name: string;
   desc: string;
   avatar?: string;
@@ -14,7 +14,7 @@ interface Cache {
 }
 
 // 2. Create a Schema corresponding to the document interface.
-const cacheSchema = new Schema<Cache>({
+const cacheSchema = new Schema<GeoCache>({
   name: {
     type: String,
     required: true,
@@ -47,4 +47,4 @@ const cacheSchema = new Schema<Cache>({
 });
 
 // 3. Create a Model.
-export const Cache = model<Cache>("Cache", cacheSchema);
+export const GeoCache = model<GeoCache>("GeoCache", cacheSchema);

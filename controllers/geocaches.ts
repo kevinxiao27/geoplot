@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { Cache } from "../models/Cache";
-import { isValidObjectId, ObjectId } from "mongoose";
+import { GeoCache } from "../models/GeoCache";
 
 // @desc Get all caches
-// @route GET /api/caches
+// @route GET /api/geocaches
 // @access PUBLIC
 export const getCaches = async (
   req: Request,
@@ -13,7 +12,39 @@ export const getCaches = async (
   next: NextFunction
 ) => {
   try {
-    const caches = await Cache.find();
+    const caches = await GeoCache.find();
+    return res
+      .status(200)
+      .json({ success: true, count: caches.length, data: caches });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @desc Get caches certain distance away from point
+// @route GET /api/geocaches
+// @access PUBLIC
+export const getCacheFromPoint = async (
+  req: Request,
+  res: Response<
+    { success: boolean; count: number; data?: any } | { error: String }
+  >,
+  next: NextFunction
+) => {
+  const { distance, location } = req.body;
+  try {
+    const caches = await GeoCache.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: location.coordinates },
+          distanceField: "dist.calculated",
+          maxDistance: distance * 1000,
+          includeLocs: "dist.location",
+          spherical: true,
+        },
+      },
+    ]);
     return res
       .status(200)
       .json({ success: true, count: caches.length, data: caches });
@@ -33,7 +64,7 @@ export const addCache = async (
 ) => {
   const { name, desc, avatar, location } = req.body;
   try {
-    const cache = await Cache.create({
+    const cache = await GeoCache.create({
       name: name,
       desc: desc,
       avatar: avatar || "",
@@ -57,7 +88,7 @@ export const updateCache = async (
   const id = req.params.id as String;
   const { name, desc, avatar, location } = req.body;
   try {
-    const cache = await Cache.findByIdAndUpdate(id, {
+    const cache = await GeoCache.findByIdAndUpdate(id, {
       ...(name && { name }),
       ...(desc && { desc }),
       ...(avatar && { avatar }),
@@ -80,7 +111,7 @@ export const deleteCache = async (
 ) => {
   const id = req.params.id as String;
   try {
-    const cache = await Cache.findByIdAndDelete(id);
+    const cache = await GeoCache.findByIdAndDelete(id);
     return res.status(201).json({ success: true, data: cache });
   } catch (err) {
     console.error(err);
