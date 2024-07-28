@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Cache } from "../models/Cache";
+import { isValidObjectId, ObjectId } from "mongoose";
 
 // @desc Get all caches
 // @route GET /api/caches
@@ -32,11 +33,6 @@ export const addCache = async (
 ) => {
   const { name, desc, avatar, location } = req.body;
   try {
-    if (!name || !desc) {
-      return res
-        .status(400)
-        .json({ success: false, data: "Submit valid inputs" });
-    }
     const cache = await Cache.create({
       name: name,
       desc: desc,
@@ -47,5 +43,47 @@ export const addCache = async (
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @desc Update cache
+// @route PUT /api/caches/:id
+// @access PUBLIC
+export const updateCache = async (
+  req: Request,
+  res: Response<{ success: boolean; data?: any } | { error: String }>,
+  next: NextFunction
+) => {
+  const id = req.params.id as String;
+  const { name, desc, avatar, location } = req.body;
+  try {
+    const cache = await Cache.findByIdAndUpdate(id, {
+      ...(name && { name }),
+      ...(desc && { desc }),
+      ...(avatar && { avatar }),
+      ...(location && { location }),
+    });
+    return res.status(201).json({ success: true, data: cache });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: `Internal server error, ${err}` });
+  }
+};
+
+// @desc Delete cache
+// @route DEL /api/caches/:id
+// @access PUBLIC
+export const deleteCache = async (
+  req: Request,
+  res: Response<{ success: boolean; data?: any } | { error: String }>,
+  next: NextFunction
+) => {
+  const id = req.params.id as String;
+  try {
+    const cache = await Cache.findByIdAndDelete(id);
+    return res.status(201).json({ success: true, data: cache });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: `Internal server error, ${err}` });
   }
 };
