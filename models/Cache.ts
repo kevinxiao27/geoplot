@@ -2,7 +2,6 @@ import { Schema, model } from "mongoose";
 
 // 1. Create an interface representing a document in MongoDB.
 interface Cache {
-  cacheId: string;
   name: string;
   desc: string;
   avatar?: string;
@@ -16,13 +15,6 @@ interface Cache {
 
 // 2. Create a Schema corresponding to the document interface.
 const cacheSchema = new Schema<Cache>({
-  cacheId: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    maxlength: [10, "Cache ID must be less than 10 chars"],
-  },
   name: {
     type: String,
     required: true,
@@ -42,14 +34,10 @@ const cacheSchema = new Schema<Cache>({
     type: {
       type: String,
       enum: ["Point"],
-      required: true,
     },
     coordinates: {
       type: [Number],
       index: "2dsphere",
-    },
-    formattedAddress: {
-      type: String,
     },
   },
   createdAt: {
