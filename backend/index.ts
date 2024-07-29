@@ -19,3 +19,5 @@ app.listen(PORT, () => {
     `Listening on http://localhost:${PORT} in ${process.env.NODE_ENV} mode`
   );
 });
+
+export default app;
