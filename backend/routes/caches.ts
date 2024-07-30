@@ -32,7 +32,11 @@ cachesRouter.get(
           !Array.isArray(coord) ||
           coord.length != 2 ||
           !(typeof coord[0] === "number" && coord[0] === coord[0]) ||
-          !(typeof coord[1] === "number" && coord[1] === coord[1])
+          !(typeof coord[1] === "number" && coord[1] === coord[1]) ||
+          coord[0] < -180 ||
+          coord[0] > 180 ||
+          coord[1] < -90 ||
+          coord[1] > 90
         ) {
           throw new Error("Invalid coordinates");
         }
