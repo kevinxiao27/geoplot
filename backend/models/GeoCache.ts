@@ -64,7 +64,6 @@ cacheSchema.pre(
         `https://api.maptiler.com/geocoding/${this.location.coordinates[0]},${this.location.coordinates[1]}.json?key=${process.env.MAPTILER_KEY}`
       );
       const place: MapTilerResponse = await data.json();
-      console.log(place);
       if (place) {
         this.place = place.features[0].place_name;
       }
