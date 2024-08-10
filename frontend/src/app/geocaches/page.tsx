@@ -1,5 +1,5 @@
 import { ListDisplay } from "@/components/ListDisplay/ListDisplay";
-import { apiResponse, apiError, GeoCache } from "../../types";
+import { apiResponse, apiError, GeoCache } from "../../../types";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
@@ -14,9 +14,17 @@ export default async function Page() {
   );
   const { geocaches, error } = await fetchData();
   return (
-    <div className="bg-white-700 mx-auto my-5 w-[98%] h-[480px]">
-      <LeafletMap geocaches={geocaches} />
-    </div>
+    <>
+      <div className="flex flex-row items-center justify-center text-white p-3 font-700 text-3xl">
+        GeoPlots
+      </div>
+      <div className="absolute bg-white-700 px-5 my-5 w-[100vw] h-[80%]">
+        <LeafletMap geocaches={geocaches} />
+      </div>
+      <div className="p-5 flex justify-end">
+        <ListDisplay geocaches={geocaches} error={error} />
+      </div>
+    </>
   );
 }
 
