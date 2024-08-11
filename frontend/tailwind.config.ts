@@ -18,12 +18,12 @@ const config: Config = {
     },
     colors: {
       primary: {
-        color: "#162039", // biztech navy
+        color: "#222222", // grey
         DEFAULT: "hsl(var(--primary))",
         foreground: "hsl(var(--primary-foreground))",
       },
       secondary: {
-        color: "#7AD040", // biztech green
+        color: "#8B0000", // biztech green
         DEFAULT: "hsl(var(--secondary))",
         foreground: "hsl(var(--secondary-foreground))",
       },

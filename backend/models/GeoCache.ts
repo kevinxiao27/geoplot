@@ -9,7 +9,6 @@ interface GeoCache {
   location: {
     type: string;
     coordinates: Number[];
-    formattedAddress: String;
   };
   createdAt: Date;
 }

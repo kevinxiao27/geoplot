@@ -12,10 +12,9 @@ export type GeoCache = {
   avatar?: string;
   location: {
     type: string;
-    coordinates: Number[];
-    formattedAddress: String;
+    coordinates: number[];
   };
-  createdAt: Date;
+  createdAt: string;
   [x: string | number | symbol]: unknown;
 };
 

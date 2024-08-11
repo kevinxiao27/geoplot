@@ -12,14 +12,14 @@ export default async function Page() {
       }),
     []
   );
-  const { geocaches, error } = await fetchData();
+  const { geocaches, count, error } = await fetchData();
   return (
     <>
       <div className="flex flex-row items-center justify-center text-white p-3 font-700 text-3xl">
         GeoPlots
       </div>
       <div className="absolute bg-white-700 px-5 my-5 w-[100vw] h-[80%]">
-        <LeafletMap geocaches={geocaches} />
+        <LeafletMap geocaches={geocaches} count={count} />
       </div>
       <div className="p-5 flex justify-end">
         <ListDisplay geocaches={geocaches} error={error} />
@@ -38,17 +38,20 @@ export const fetchData = async () => {
     if ("error" in data) {
       return {
         geocaches: null,
+        count: 0,
         error: data?.error,
       };
     }
 
     return {
       geocaches: data.data,
+      count: data.count,
       error: null,
     };
   } catch (error) {
     return {
       geocaches: null,
+      count: 0,
       error: "Unable to parse response",
     };
   }
