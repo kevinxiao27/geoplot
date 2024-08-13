@@ -1,4 +1,4 @@
-import { ListDisplay } from "@/components/ListDisplay/ListDisplay";
+import { SideBar } from "@/components/SideBar/SideBar";
 import { apiResponse, apiError, GeoCache } from "../../types";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";

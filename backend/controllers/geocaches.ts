@@ -68,7 +68,7 @@ export const addCache = async (
       name: name,
       desc: desc,
       avatar: avatar || "",
-      location: location || null,
+      location: location,
     });
     return res.status(201).json({ success: true, data: cache });
   } catch (err) {

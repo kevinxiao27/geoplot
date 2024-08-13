@@ -19,5 +19,5 @@ export type GeoCache = {
 };
 
 export interface apiError {
-  error: String;
+  error: string;
 }
