@@ -1,42 +1,45 @@
 "use server";
 import { apiError, apiResponse, GeoCache } from "../../types";
+import "../../envConfig";
 
 interface response {
-  geocaches: null | undefined | GeoCache[];
+  data: null | undefined | GeoCache[];
   count: number;
   error: string | null;
 }
 
-async function fetchData(method: string, body?: Body): Promise<response> {
+async function FETCH(method: string, body?: Object): Promise<response> {
   try {
-    const response = await fetch(
-      "https://geoplotapi.vercel.app/api/geocaches",
-      {
-        method: `${method}`,
-        body: JSON.stringify(body),
-      }
-    );
+    console.log(JSON.stringify(body));
+    const response = await fetch(`${process.env.API_DOMAIN}`, {
+      method: `${method}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
     const data: apiResponse<GeoCache[]> | apiError = await response.json();
+    console.log(data);
     if ("error" in data) {
       return {
-        geocaches: null,
+        data: null,
         count: 0,
         error: data?.error,
       };
     }
 
     return {
-      geocaches: data.data,
-      count: data.count,
+      data: data.data,
+      count: data.count || 0,
       error: null,
     };
   } catch (error) {
     return {
-      geocaches: null,
+      data: null,
       count: 0,
       error: "Unable to parse response",
     };
   }
 }
 
-export default fetchData;
+export default FETCH;

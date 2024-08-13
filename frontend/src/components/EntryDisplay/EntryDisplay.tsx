@@ -9,11 +9,7 @@ interface EntryDisplayProps {
   map: Map | null;
 }
 
-export const EntryDisplay: React.FC<EntryDisplayProps> = ({
-  geocaches,
-  error,
-  map,
-}) => {
+export const EntryDisplay: React.FC<EntryDisplayProps> = ({ geocaches, error, map }) => {
   return (
     <div className="flex flex-col">
       {geocaches && (
@@ -29,23 +25,15 @@ export const EntryDisplay: React.FC<EntryDisplayProps> = ({
               >
                 <div className="flex flex-col justify-center space-y-3">
                   <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden bg-white-blue">
-                    <Image
-                      fill
-                      src={`${gc.avatar}`}
-                      style={{ objectFit: "cover" }}
-                      alt="avatar"
-                    />
+                    <Image fill src={`${gc.avatar}`} style={{ objectFit: "cover" }} alt="avatar" />
                   </div>
                   <div
                     className="flex flex-row space-x-1 items-center"
                     onClick={() => {
-                      map?.setView([
-                        gc.location.coordinates[1],
-                        gc.location.coordinates[0],
-                      ]);
+                      map?.setView([gc.location.coordinates[1], gc.location.coordinates[0]]);
                     }}
                   >
-                    <p className="text-white text-[11px]">View on Map</p>
+                    <p className="text-white text-[11px] cursor-pointer">View on Map</p>
                     <LocateFixedIcon width={20} height={20} />
                   </div>
                 </div>
@@ -54,8 +42,7 @@ export const EntryDisplay: React.FC<EntryDisplayProps> = ({
 
                   <p className="text-[9px]">Location: {gc.place}</p>
                   <p className="text-[9px] pb-2">
-                    {date.toLocaleDateString("en-US")}{" "}
-                    {date.toLocaleTimeString("en-US")}
+                    {date.toLocaleDateString("en-US")} {date.toLocaleTimeString("en-US")}
                   </p>
 
                   <p className="text-[10px]">Description: {gc.desc}</p>

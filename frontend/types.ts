@@ -1,6 +1,6 @@
 export interface apiResponse<T> {
   success: boolean;
-  count: number;
+  count?: number;
   data?: T;
 }
 
