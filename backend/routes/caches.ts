@@ -1,15 +1,8 @@
-import express, { Router, Request, Response } from "express";
-import {
-  addCache,
-  deleteCache,
-  getCacheFromPoint,
-  getCaches,
-  updateCache,
-} from "../controllers/geocaches";
+import express, { Router } from "express";
+import { addCache, deleteCache, getCacheFromPoint, getCaches, updateCache } from "../controllers/geocaches";
 import { validateResults } from "../middlewares/validation";
 import { body, check, param } from "express-validator";
 import { isValidObjectId } from "mongoose";
-import { isInt8Array } from "util/types";
 
 const cachesRouter: Router = express.Router();
 const validateId = param("id")
@@ -24,7 +17,7 @@ cachesRouter.get("/", getCaches);
 cachesRouter.get(
   "/point",
   [
-    body("distance").exists().isNumeric(),
+    body("distance").exists().isNumeric().withMessage("Distance is not a number"),
     body("location.coordinates")
       .notEmpty()
       .custom((coord) => {
@@ -49,7 +42,7 @@ cachesRouter.get(
 cachesRouter.post(
   "/",
   [
-    check(["name", "desc"]).not().isEmpty(),
+    check(["name", "desc"]).not().isEmpty().withMessage("Title and description are empty"),
     body("location.coordinates")
       .notEmpty()
       .custom((coord) => {
@@ -73,7 +66,7 @@ cachesRouter.post(
 );
 cachesRouter.put(
   "/:id",
-  [check(["name", "desc"]).not().isEmpty(), validateId, validateResults],
+  [check(["name", "desc"]).not().isEmpty().withMessage("Title and description are empty"), validateId, validateResults],
   updateCache
 );
 cachesRouter.delete("/:id", [validateId, validateResults], deleteCache);
