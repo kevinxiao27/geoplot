@@ -8,10 +8,9 @@ const cachesRouter: Router = express.Router();
 const validateId = param("id")
   .exists()
   .custom((id) => {
-    if (!isValidObjectId(id)) {
-      throw new Error("Invalid cache id used to index");
-    }
-  });
+    return isValidObjectId(id);
+  })
+  .withMessage("Invalid objectid");
 
 cachesRouter.get("/", getCaches);
 cachesRouter.get(

@@ -6,16 +6,12 @@ import { GeoCache } from "../models/GeoCache";
 // @access PUBLIC
 export const getCaches = async (
   req: Request,
-  res: Response<
-    { success: boolean; count: number; data?: any } | { error: String }
-  >,
+  res: Response<{ success: boolean; count: number; data?: any } | { error: String }>,
   next: NextFunction
 ) => {
   try {
     const caches = await GeoCache.find();
-    return res
-      .status(200)
-      .json({ success: true, count: caches.length, data: caches });
+    return res.status(200).json({ success: true, count: caches.length, data: caches });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -27,9 +23,7 @@ export const getCaches = async (
 // @access PUBLIC
 export const getCacheFromPoint = async (
   req: Request,
-  res: Response<
-    { success: boolean; count: number; data?: any } | { error: String }
-  >,
+  res: Response<{ success: boolean; count: number; data?: any } | { error: String }>,
   next: NextFunction
 ) => {
   const { distance, location } = req.body;
@@ -45,9 +39,7 @@ export const getCacheFromPoint = async (
         },
       },
     ]);
-    return res
-      .status(200)
-      .json({ success: true, count: caches.length, data: caches });
+    return res.status(200).json({ success: true, count: caches.length, data: caches });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
