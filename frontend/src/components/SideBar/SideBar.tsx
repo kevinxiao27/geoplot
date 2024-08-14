@@ -2,27 +2,28 @@ import { GeoCache } from "../../../types";
 import { Map } from "leaflet";
 import { PlusSquare, ViewIcon } from "lucide-react";
 import { EntryDisplay } from "../EntryDisplay/EntryDisplay";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { GeocacheForm } from "../GeocacheForm/GeocacheForm";
 
 interface SideBarProps {
   geocaches: GeoCache[] | null | undefined;
   error: String | null | undefined;
   map: Map | null;
+  refreshMap: Dispatch<SetStateAction<any>>;
 }
 
-export const SideBar: React.FC<SideBarProps> = ({ geocaches, error, map }) => {
+export const SideBar: React.FC<SideBarProps> = ({ geocaches, error, map, refreshMap }) => {
   const [SideBarState, setSideBarState] = useState("All Entries");
   const activeSideBarComponent = (state: string) => {
     switch (state) {
       case "All Entries":
-        return <EntryDisplay geocaches={geocaches} error={error} map={map} />;
+        return <EntryDisplay geocaches={geocaches} error={error} map={map} refreshMap={refreshMap} />;
 
       case "Create Geocache":
-        return <GeocacheForm />;
+        return <GeocacheForm map={map} />;
 
       default:
-        return <EntryDisplay geocaches={geocaches} error={error} map={map} />;
+        return <EntryDisplay geocaches={geocaches} error={error} map={map} refreshMap={refreshMap} />;
     }
   };
   return (

@@ -21,23 +21,17 @@ interface LeafletMapProps {
   setMap: Dispatch<SetStateAction<Map | null>>;
 }
 
-const LeafletMap: React.FC<LeafletMapProps> = ({
-  geocaches,
-  count,
-  setMap,
-}) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ geocaches, count, setMap }) => {
   // random point in mexico as center if nothing is found
   let posix: LatLngExpression = [5.0, -75.0];
 
   if (count > 0 && geocaches) {
-    posix = [
-      geocaches[0].location.coordinates[1],
-      geocaches[0].location.coordinates[0],
-    ];
+    posix = [geocaches[0].location.coordinates[1], geocaches[0].location.coordinates[0]];
   }
 
   return (
     <MapContainer
+      id="idkuniqueiguess"
       center={posix}
       zoom={defaults.zoom}
       scrollWheelZoom={false}
@@ -54,10 +48,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {geocaches?.map((gc) => (
-        <Marker
-          position={[gc.location.coordinates[1], gc.location.coordinates[0]]}
-          draggable={false}
-        >
+        <Marker position={[gc.location.coordinates[1], gc.location.coordinates[0]]} draggable={false}>
           <Popup>
             {gc.name}: {gc.place}
           </Popup>

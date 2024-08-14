@@ -8,18 +8,18 @@ interface response {
   error: string | null;
 }
 
-async function FETCH(method: string, body?: Object): Promise<response> {
+async function FETCH(method: string, body?: Object, collection?: string, id?: string): Promise<response> {
   try {
-    console.log(JSON.stringify(body));
-    const response = await fetch(`${process.env.API_DOMAIN}`, {
+    console.log(`${process.env.API_DOMAIN}/${id ? id : ""}`);
+    const response = await fetch(`${process.env.API_DOMAIN}/${id ? id : ""}`, {
       method: `${method}`,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      ...(body && { body: JSON.stringify(body) }),
+      ...(collection && { next: { tags: [collection] } }),
     });
     const data: apiResponse<GeoCache[]> | apiError = await response.json();
-    console.log(data);
     if ("error" in data) {
       return {
         data: null,
@@ -34,6 +34,7 @@ async function FETCH(method: string, body?: Object): Promise<response> {
       error: null,
     };
   } catch (error) {
+    console.error(error);
     return {
       data: null,
       count: 0,

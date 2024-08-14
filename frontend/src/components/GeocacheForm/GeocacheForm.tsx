@@ -10,6 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useState } from "react";
 import FETCH from "@/utils/fetchData";
+import { Map } from "leaflet";
+import { revalidate } from "@/utils/actions";
+
+interface formProps {
+  map: Map | null;
+}
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -17,9 +23,10 @@ const formSchema = z.object({
   avatar: z.union([z.string().trim().url(), z.literal("")]),
 });
 
-export const GeocacheForm: React.FC = () => {
+export const GeocacheForm: React.FC<formProps> = ({ map }) => {
   const [userLocation, setUserLocation] = useState<GeolocationCoordinates | null>(null);
   const [formResult, setFormResult] = useState<string>("");
+  const [isChecked, setIsChecked] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,6 +35,7 @@ export const GeocacheForm: React.FC = () => {
       avatar: "",
     },
   });
+
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -47,27 +55,31 @@ export const GeocacheForm: React.FC = () => {
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (userLocation == null) {
-      return;
+    let location = [userLocation?.longitude, userLocation?.latitude];
+    if (userLocation == null || !isChecked) {
+      location = [map?.getCenter().lng, map?.getCenter().lat];
     }
     const { data, error } = await FETCH("POST", {
       name: values.title,
       desc: values.desc,
-      avatar:
-        values.avatar ||
-        "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
+      avatar: values.avatar,
       location: {
         type: "Point",
-        coordinates: [userLocation?.longitude, userLocation?.latitude],
+        coordinates: [location[0], location[1]],
       },
     });
 
     if (!error && data) {
       setFormResult("success");
+      revalidate("geocache");
     } else {
       setFormResult(`Error occured ${error}`);
     }
   }
+
+  const checkHandler = () => {
+    setIsChecked(!isChecked);
+  };
 
   return (
     <div
@@ -114,6 +126,12 @@ export const GeocacheForm: React.FC = () => {
               </FormItem>
             )}
           />
+          <div className="flex flex-row items-center">
+            <input type="checkbox" id="checkbox" checked={isChecked} onChange={checkHandler} />
+            <label htmlFor="checkbox" className="text-xs px-3">
+              Use your location instead of center of map. optional.
+            </label>
+          </div>
           <div className="flex flex-row space-x-3 items-center">
             <Button type="submit">Submit</Button>
             <p className="text-xs">{formResult}</p>

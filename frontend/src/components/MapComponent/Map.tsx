@@ -13,6 +13,7 @@ interface MapProps {
 
 export const MapView: React.FC<MapProps> = ({ geocaches, count, error }) => {
   const [map, setMap] = useState<Map | null>(null);
+  const [key, setKey] = useState("nice");
   const LeafletMap = useMemo(
     () =>
       dynamic(() => import("@/components/LeafletMap/LeafletMap"), {
@@ -24,10 +25,10 @@ export const MapView: React.FC<MapProps> = ({ geocaches, count, error }) => {
   return (
     <>
       <div className="absolute bg-white-700 px-5 my-5 w-[100vw] h-[80%]">
-        <LeafletMap geocaches={geocaches} count={count} setMap={setMap} />
+        <LeafletMap geocaches={geocaches} count={count} setMap={setMap} key={key} />
       </div>
       <div className="p-5 flex justify-end">
-        <SideBar geocaches={geocaches} error={error} map={map} />
+        <SideBar geocaches={geocaches} error={error} map={map} refreshMap={setKey} />
       </div>
     </>
   );
