@@ -28,8 +28,8 @@ export const SideBar: React.FC<SideBarProps> = ({ geocaches, error, map, refresh
   };
   return (
     <div className="flex flex-col">
-      <div className="relative z-[500] lg:w-[30vw] bg-primary-color p-5 border-white border-2 rounded-t-xl border-b-0 flex flex-row items-center">
-        <h3 className="text-white flex-grow">{SideBarState}</h3>
+      <div className="relative z-[500] lg:w-[30vw] bg-primary-color p-5 border-white border-[4px] rounded-t-xl border-b-0 flex flex-row items-center">
+        <h3 className="text-white flex-grow text-xl">{SideBarState}</h3>
         <ViewIcon
           width={60}
           height={60}

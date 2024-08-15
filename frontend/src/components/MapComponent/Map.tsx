@@ -17,15 +17,15 @@ export const MapView: React.FC<MapProps> = ({ geocaches, count, error }) => {
   const LeafletMap = useMemo(
     () =>
       dynamic(() => import("@/components/LeafletMap/LeafletMap"), {
-        loading: () => <p>A map is loading</p>,
+        loading: () => <div className="h-full w-full rounded-[1.25] bg-slate-500"></div>,
         ssr: false,
       }),
     []
   );
   return (
     <>
-      <div className="absolute bg-white-700 px-5 my-5 w-[100vw] h-[80%]">
-        <LeafletMap geocaches={geocaches} count={count} setMap={setMap} key={key} />
+      <div className="absolute bg-white-700 px-5 my-5 w-[100vw] h-[80%]" key={key}>
+        <LeafletMap geocaches={geocaches} count={count} setMap={setMap} />
       </div>
       <div className="p-5 flex justify-end">
         <SideBar geocaches={geocaches} error={error} map={map} refreshMap={setKey} />

@@ -41,6 +41,7 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation(position.coords);
+          map?.setView([position.coords.latitude, position.coords.longitude]);
         },
         (error) => {
           console.error("Error getting user location:", error);
@@ -132,7 +133,7 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
               Use your location instead of center of map. optional.
             </label>
           </div>
-          <div className="flex flex-row space-x-3 items-center">
+          <div className="flex flex-row space-x-2 items-center">
             <Button type="submit">Submit</Button>
             <p className="text-xs">{formResult}</p>
           </div>

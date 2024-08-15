@@ -10,7 +10,6 @@ interface response {
 
 async function FETCH(method: string, body?: Object, collection?: string, id?: string): Promise<response> {
   try {
-    console.log(`${process.env.API_DOMAIN}/${id ? id : ""}`);
     const response = await fetch(`${process.env.API_DOMAIN}/${id ? id : ""}`, {
       method: `${method}`,
       headers: {
