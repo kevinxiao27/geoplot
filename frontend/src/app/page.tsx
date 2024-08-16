@@ -1,8 +1,8 @@
 import { MapView } from "@/components/MapComponent/Map";
-import FETCH from "@/utils/fetchData";
+import fetchBackend from "@/utils/fetchData";
 
 export default async function Page() {
-  const { data: geocaches, count, error } = await FETCH("GET", undefined, "geocache");
+  const { data: geocaches, count, error } = await fetchBackend({ method: "GET", collection: "geocache" });
   return (
     <>
       <div className="flex flex-row items-center justify-center text-white p-3 font-700 text-3xl">GeoPlots</div>

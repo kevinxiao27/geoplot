@@ -1,8 +1,8 @@
 import { Map } from "leaflet";
 import { GeoCache } from "../../../types";
 import Image from "next/image";
-import { LocateFixedIcon, ImageOff, Trash2Icon, LucideTrash2 } from "lucide-react";
-import FETCH from "@/utils/fetchData";
+import { LocateFixedIcon, ImageOff, LucideTrash2 } from "lucide-react";
+import fetchBackend from "@/utils/fetchData";
 import { Dispatch, SetStateAction, useState } from "react";
 import { revalidate } from "@/utils/actions";
 
@@ -18,23 +18,16 @@ export const EntryDisplay: React.FC<EntryDisplayProps> = ({ geocaches, error, ma
   return (
     <div className="flex flex-col">
       {geocaches && (
-        <div
-          className={`relative z-[500] lg:w-[30vw] h-[60vh] bg-white flex flex-col rounded-b-xl overflow-y-auto overflow-x-hidden border-white border-2`}
-        >
+        <div className={`relative z-[500] lg:w-[30vw] h-[60vh] bg-white flex flex-col rounded-b-xl overflow-y-auto overflow-x-hidden border-white border-2`}>
           <div className={`bg-primary-color text-red-600 text-xs text-center ${msg === "" ? "" : "p-3"}`}>{msg}</div>
           {geocaches.toReversed().map((gc, i) => {
             const date = new Date(gc.createdAt);
             return (
               <>
-                <div
-                  key={gc._id}
-                  className="flex flex-row space-x-3 justify-between p-8 rounded-md border-white border-2 bg-primary-color py-5"
-                >
+                <div key={gc._id + new Date()} className="flex flex-row space-x-3 justify-between p-8 rounded-md border-white border-2 bg-primary-color py-5">
                   <div className="flex flex-col justify-center space-y-3 pr-2">
                     <div
-                      className={`relative w-[100px] h-[100px] rounded-full bg-white-blue items-center ${
-                        !gc.avatar ? "overflow-visible" : "overflow-hidden"
-                      }`}
+                      className={`relative w-[100px] h-[100px] rounded-full bg-white-blue items-center ${!gc.avatar ? "overflow-visible" : "overflow-hidden"}`}
                     >
                       {gc.avatar && <Image fill src={`${gc.avatar}`} style={{ objectFit: "cover" }} alt="avatar" />}
 
@@ -66,7 +59,7 @@ export const EntryDisplay: React.FC<EntryDisplayProps> = ({ geocaches, error, ma
                     height={100}
                     className="p-1 translate-y-[-30px] cursor-pointer"
                     onClick={async () => {
-                      const { data, error } = await FETCH("DELETE", undefined, undefined, gc._id);
+                      const { data, error } = await fetchBackend({ method: "DELETE", endpoint: gc._id });
                       if (!error && data) {
                         revalidate("geocache");
                         geocaches.splice(i, 1);
@@ -80,8 +73,10 @@ export const EntryDisplay: React.FC<EntryDisplayProps> = ({ geocaches, error, ma
               </>
             );
           })}
-          {!geocaches && (
-            <div className="w-[40vw] h-full space-y-5 bg-navbar-tab-hover-bg p-5 flex flex-col rounded-lg">
+          {error && (
+            <div
+              className={`relative z-[500] lg:w-[30vw] h-[60vh] bg-white flex flex-col rounded-b-xl overflow-y-auto overflow-x-hidden border-white border-2`}
+            >
               <h2>{error}</h2>
             </div>
           )}

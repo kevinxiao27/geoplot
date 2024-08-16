@@ -1,4 +1,4 @@
-export interface apiResponse<T> {
+export interface ApiResponse<T> {
   success: boolean;
   count?: number;
   data?: T;
@@ -18,6 +18,6 @@ export type GeoCache = {
   [x: string | number | symbol]: unknown;
 };
 
-export interface apiError {
+export interface ApiError {
   error: string;
 }

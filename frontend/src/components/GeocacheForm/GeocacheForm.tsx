@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useState } from "react";
-import FETCH from "@/utils/fetchData";
+import fetchBackend from "@/utils/fetchData";
 import { Map } from "leaflet";
 import { revalidate } from "@/utils/actions";
 
@@ -60,13 +60,16 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
     if (userLocation == null || !isChecked) {
       location = [map?.getCenter().lng, map?.getCenter().lat];
     }
-    const { data, error } = await FETCH("POST", {
-      name: values.title,
-      desc: values.desc,
-      avatar: values.avatar,
-      location: {
-        type: "Point",
-        coordinates: [location[0], location[1]],
+    const { data, error } = await fetchBackend({
+      method: "POST",
+      body: {
+        name: values.title,
+        desc: values.desc,
+        avatar: values.avatar,
+        location: {
+          type: "Point",
+          coordinates: [location[0], location[1]],
+        },
       },
     });
 

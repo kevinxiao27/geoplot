@@ -11,6 +11,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 import { SetStateAction, Dispatch } from "react";
 import Image from "next/image.js";
+import { ImageOff } from "lucide-react";
 
 const defaults = {
   zoom: 12,
@@ -53,7 +54,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ geocaches, count, setMap }) => 
             <div className="flex flex-col h-[400px] w-[300px] items-center justify-center p-3 border-2 rounded-[1.25rem] border-black">
               <div className="py-3 font-[600]">{gc.name.toLocaleUpperCase()}</div>
               <div className="relative py-5 rounded-[1.25rem] overflow-hidden h-[200px] w-[267.5px]">
-                <Image fill style={{ objectFit: "cover" }} src={gc.avatar ? gc.avatar : ""} alt="img" />
+                {gc.avatar && <Image fill src={`${gc.avatar}`} style={{ objectFit: "cover" }} alt="avatar" />}
+                <ImageOff className="object-cover h-[200px] w-[267.5px]" />
               </div>
               <div className="text-xs p-3">Description: {gc.desc}</div>
             </div>

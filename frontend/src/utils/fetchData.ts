@@ -1,5 +1,5 @@
 "use server";
-import { apiError, apiResponse, GeoCache } from "../../types";
+import { ApiError, ApiResponse, GeoCache } from "../../types";
 import "../../envConfig";
 
 interface response {
@@ -8,17 +8,27 @@ interface response {
   error: string | null;
 }
 
-async function FETCH(method: string, body?: Object, collection?: string, id?: string): Promise<response> {
+interface FetchBackendOptions {
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  body?: Record<string, unknown>;
+  collection?: string;
+  endpoint?: string;
+}
+
+async function fetchBackend({ method, body, collection, endpoint }: FetchBackendOptions): Promise<response> {
   try {
-    const response = await fetch(`${process.env.API_DOMAIN}/${id ? id : ""}`, {
+    const headers: Record<string, string> = {};
+    if (method === "POST" || method === "PUT") {
+      headers["Content-Type"] = "application/json";
+      headers["Accept"] = "application/json";
+    }
+    const response = await fetch(`${process.env.API_DOMAIN}/${endpoint ? endpoint : ""}`, {
       method: `${method}`,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       ...(body && { body: JSON.stringify(body) }),
       ...(collection && { next: { tags: [collection] } }),
     });
-    const data: apiResponse<GeoCache[]> | apiError = await response.json();
+    const data: ApiResponse<GeoCache[]> | ApiError = await response.json();
     if ("error" in data) {
       return {
         data: null,
@@ -33,13 +43,12 @@ async function FETCH(method: string, body?: Object, collection?: string, id?: st
       error: null,
     };
   } catch (error) {
-    console.error(error);
     return {
       data: null,
       count: 0,
-      error: "Unable to parse response",
+      error: `Unable to parse response ${error}`,
     };
   }
 }
 
-export default FETCH;
+export default fetchBackend;
