@@ -1,8 +1,13 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps } from "firebase-admin/app";
+import * as admin from "firebase-admin";
+import * as client from "firebase/app";
+import * as clientauth from "firebase/auth";
 import "../../envConfig";
-import { getAnalytics } from "firebase/analytics";
+import { SessionCookieOptions, getAuth } from "firebase-admin/auth";
+import "../../envConfig";
+
+import serviceAccount from "./servicekey.json";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,6 +23,21 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-export const auth = getAuth(app);
+const cert: admin.ServiceAccount = {
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY,
+};
+
+export const firebaseApp =
+  getApps().find((it) => it.name === "firebase-admin-app") ||
+  initializeApp(
+    {
+      credential: admin.credential.cert(cert),
+    },
+    "firebase-admin-app"
+  );
+export const auth = getAuth(firebaseApp);
+
+export const app = !client.getApps().length ? client.initializeApp(firebaseConfig) : client.getApp();
+export const clientAuth = clientauth.getAuth(app);

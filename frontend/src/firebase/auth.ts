@@ -1,6 +1,6 @@
 import "server-only";
 
-import { auth } from "./config";
+import { clientAuth } from "./config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 
 interface AuthResponse {
@@ -10,7 +10,7 @@ interface AuthResponse {
 
 export async function signUp(email: string, password: string): Promise<AuthResponse> {
   try {
-    const result: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const result: UserCredential = await createUserWithEmailAndPassword(clientAuth, email, password);
     return { result: result, error: null };
   } catch (e) {
     return { result: null, error: e };
@@ -19,7 +19,7 @@ export async function signUp(email: string, password: string): Promise<AuthRespo
 
 export async function signIn(email: string, password: string): Promise<AuthResponse> {
   try {
-    const result: UserCredential = await signInWithEmailAndPassword(auth, email, password);
+    const result: UserCredential = await signInWithEmailAndPassword(clientAuth, email, password);
     return { result: result, error: null };
   } catch (e) {
     return { result: null, error: e };
