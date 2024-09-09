@@ -1,10 +1,10 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps } from "firebase-admin/app";
-import * as admin from "firebase-admin";
-import * as client from "firebase/app";
-import * as clientauth from "firebase/auth";
+// import { initializeApp, getApps } from "firebase-admin/app";
+import admin from "firebase-admin";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import "../../envConfig";
-import { SessionCookieOptions, getAuth } from "firebase-admin/auth";
+// import { SessionCookieOptions, getAuth } from "firebase-admin/auth";
 import "../../envConfig";
 
 import serviceAccount from "./servicekey.json";
@@ -20,24 +20,14 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 const cert: admin.ServiceAccount = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY
 };
 
-export const serverApp =
-  getApps().find((it) => it.name === "firebase-admin-app") ||
-  initializeApp(
-    {
-      credential: admin.credential.cert(cert),
-    },
-    "firebase-admin-app"
-  );
-export const serverAuth = getAuth(serverApp);
-
-export const clientApp = !client.getApps().length ? client.initializeApp(firebaseConfig) : client.getApp();
-export const clientAuth = clientauth.getAuth(clientApp);
+export const app = initializeApp(firebaseConfig);
+export const clientAuth = getAuth(app);

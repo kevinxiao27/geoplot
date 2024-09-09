@@ -1,11 +1,9 @@
-import "server-only";
-
 import { clientAuth } from "./config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 
 interface AuthResponse {
   result: UserCredential | null;
-  error: unknown;
+  error: any;
 }
 
 export async function signUp(email: string, password: string): Promise<AuthResponse> {
