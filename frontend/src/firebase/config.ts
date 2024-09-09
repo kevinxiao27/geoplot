@@ -29,7 +29,7 @@ const cert: admin.ServiceAccount = {
   privateKey: process.env.FIREBASE_PRIVATE_KEY,
 };
 
-export const firebaseApp =
+export const serverApp =
   getApps().find((it) => it.name === "firebase-admin-app") ||
   initializeApp(
     {
@@ -37,7 +37,7 @@ export const firebaseApp =
     },
     "firebase-admin-app"
   );
-export const auth = getAuth(firebaseApp);
+export const serverAuth = getAuth(serverApp);
 
-export const app = !client.getApps().length ? client.initializeApp(firebaseConfig) : client.getApp();
-export const clientAuth = clientauth.getAuth(app);
+export const clientApp = !client.getApps().length ? client.initializeApp(firebaseConfig) : client.getApp();
+export const clientAuth = clientauth.getAuth(clientApp);
