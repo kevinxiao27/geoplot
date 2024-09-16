@@ -1,6 +1,6 @@
 "use server";
 import { ApiError, ApiResponse, GeoCache } from "../../types";
-import "../../envConfig";
+import "../../envConfig.js";
 
 interface response {
   data: null | undefined | GeoCache[];
@@ -26,27 +26,27 @@ async function fetchBackend({ method, body, collection, endpoint }: FetchBackend
       method: `${method}`,
       headers,
       ...(body && { body: JSON.stringify(body) }),
-      ...(collection && { next: { tags: [collection] } }),
+      ...(collection && { next: { tags: [collection] } })
     });
     const data: ApiResponse<GeoCache[]> | ApiError = await response.json();
     if ("error" in data) {
       return {
         data: null,
         count: 0,
-        error: data?.error,
+        error: data?.error
       };
     }
 
     return {
       data: data.data,
       count: data.count || 0,
-      error: null,
+      error: null
     };
   } catch (error) {
     return {
       data: null,
       count: 0,
-      error: `Unable to parse response ${error}`,
+      error: `Unable to parse response ${error}`
     };
   }
 }
