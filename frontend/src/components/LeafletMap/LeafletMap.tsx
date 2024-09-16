@@ -1,7 +1,7 @@
 "use client";
 
 import { GeoCache } from "../../../types.js";
-import "../../../envConfig.ts";
+import "../../../envConfig.js";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { LatLngExpression, Map } from "leaflet";
@@ -14,7 +14,7 @@ import Image from "next/image.js";
 import { ImageOff } from "lucide-react";
 
 const defaults = {
-  zoom: 12,
+  zoom: 12
 };
 
 interface LeafletMapProps {
@@ -32,7 +32,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ geocaches, count, setMap }) => 
 
   return (
     <MapContainer
-      id="map-container"
+      id='map-container'
       center={posix}
       zoom={defaults.zoom}
       scrollWheelZoom={false}
@@ -41,23 +41,23 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ geocaches, count, setMap }) => 
         height: "100%",
         width: "100%",
         borderRadius: "1.25rem",
-        overflow: "hidden",
+        overflow: "hidden"
       }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
       {geocaches?.map((gc) => (
         <Marker position={[gc.location.coordinates[1], gc.location.coordinates[0]]} key={gc._id} draggable={false}>
           <Popup>
-            <div className="flex flex-col h-[400px] w-[300px] items-center justify-center p-3 border-2 rounded-[1.25rem] border-black">
-              <div className="py-3 font-[600]">{gc.name.toLocaleUpperCase()}</div>
-              <div className="relative py-5 rounded-[1.25rem] overflow-hidden h-[200px] w-[267.5px]">
-                {gc.avatar && <Image fill src={`${gc.avatar}`} style={{ objectFit: "cover" }} alt="avatar" />}
-                <ImageOff className="object-cover h-[200px] w-[267.5px]" />
+            <div className='flex flex-col h-[400px] w-[300px] items-center justify-center p-3 border-2 rounded-[1.25rem] border-black'>
+              <div className='py-3 font-[600]'>{gc.name.toLocaleUpperCase()}</div>
+              <div className='relative py-5 rounded-[1.25rem] overflow-hidden h-[200px] w-[267.5px]'>
+                {gc.avatar && <Image fill src={`${gc.avatar}`} style={{ objectFit: "cover" }} alt='avatar' />}
+                <ImageOff className='object-cover h-[200px] w-[267.5px]' />
               </div>
-              <div className="text-xs p-3">Description: {gc.desc}</div>
+              <div className='text-xs p-3'>Description: {gc.desc}</div>
             </div>
           </Popup>
         </Marker>
