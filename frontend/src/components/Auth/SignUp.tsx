@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PasswordInput from "./PasswordInput";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -32,6 +33,7 @@ const formSchema = z
 
 const SignUp: FC<{}> = () => {
   const [signUpError, setSignUpError] = useState("");
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,7 +63,7 @@ const SignUp: FC<{}> = () => {
       }
     }
 
-    console.log(result);
+    router.push("/");
   }
   return (
     <Form {...form}>

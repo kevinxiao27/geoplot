@@ -20,7 +20,7 @@ interface formProps {
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   desc: z.string().min(2).max(300),
-  avatar: z.union([z.string().trim().url(), z.literal("")]),
+  avatar: z.union([z.string().trim().url(), z.literal("")])
 });
 
 export const GeocacheForm: React.FC<formProps> = ({ map }) => {
@@ -32,8 +32,8 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
     defaultValues: {
       title: "",
       desc: "",
-      avatar: "",
-    },
+      avatar: ""
+    }
   });
 
   const getUserLocation = () => {
@@ -68,9 +68,9 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
         avatar: values.avatar,
         location: {
           type: "Point",
-          coordinates: [location[0], location[1]],
-        },
-      },
+          coordinates: [location[0], location[1]]
+        }
+      }
     });
 
     if (!error && data) {
@@ -90,15 +90,15 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
       className={`relative z-[500] lg:w-[30vw] h-[60vh] space-y-5 bg-[#000000] flex flex-col rounded-b-xl overflow-y-auto overflow-x-hidden border-white border-2 p-5`}
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
             control={form.control}
-            name="title"
+            name='title'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="title here." {...field} />
+                  <Input placeholder='title here.' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,12 +106,12 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
           />
           <FormField
             control={form.control}
-            name="desc"
+            name='desc'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="enter description here." {...field} />
+                  <Textarea placeholder='enter description here.' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -119,26 +119,26 @@ export const GeocacheForm: React.FC<formProps> = ({ map }) => {
           />
           <FormField
             control={form.control}
-            name="avatar"
+            name='avatar'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <Input placeholder="add optional image link here." {...field} />
+                  <Input placeholder='add optional image link here.' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="flex flex-row items-center">
-            <input type="checkbox" id="checkbox" checked={isChecked} onChange={checkHandler} />
-            <label htmlFor="checkbox" className="text-xs px-3">
+          <div className='flex flex-row items-center'>
+            <input type='checkbox' id='checkbox' checked={isChecked} onChange={checkHandler} />
+            <label htmlFor='checkbox' className='text-xs px-3'>
               Use your location instead of center of map. optional.
             </label>
           </div>
-          <div className="flex flex-row space-x-2 items-center">
-            <Button type="submit">Submit</Button>
-            <p className="text-xs">{formResult}</p>
+          <div className='flex flex-row space-x-2 items-center'>
+            <Button type='submit'>Submit</Button>
+            <p className='text-xs'>{formResult}</p>
           </div>
         </form>
       </Form>

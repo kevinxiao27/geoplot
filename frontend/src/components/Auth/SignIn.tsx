@@ -45,17 +45,22 @@ const SignIn: FC<{}> = () => {
     router.push("/");
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 bg-black border-white border-2 rounded-s p-4'>
-        <TextInput form={form} name='email' description='Email' tooltip='Your display name' />
-        <PasswordInput form={form} name='password' description='Password' tooltip='Your password to login' />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 bg-black border-white border-2 rounded-s p-4'>
+          <TextInput form={form} name='email' description='Email' tooltip='Your display name' />
+          <PasswordInput form={form} name='password' description='Password' tooltip='Your password to login' />
 
-        <div className='flex flex-row space-x-3 items-center'>
-          <Button type='submit'>Submit</Button>
-          <div>{signInError}</div>
-        </div>
-      </form>
-    </Form>
+          <div className='flex flex-row space-x-3 items-center'>
+            <Button type='submit'>Submit</Button>
+            <div>{signInError}</div>
+            <div className='text-blue-300 underline cursor-pointer' onClick={() => router.push("/sign-up")}>
+              Create an account
+            </div>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 };
 
